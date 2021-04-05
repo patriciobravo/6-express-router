@@ -1,5 +1,7 @@
-const express = require('express');
-const app = express();
+// const express = require('express');
+// const app = express();
+
+const ModelCategoria = require('../models/categoria_model');
 
 const data = [
     {
@@ -35,6 +37,17 @@ function getCategoria(req, res) {
 //Guardar Categoria
 
 function guardar(req, res)  {
+    let data = {
+        categoria_nombre: "polos"
+    }
+
+    modelCategoria = new ModelCategoria(data);
+    modelCategoria.save( (err, docCategoria) => {
+        
+        console.log(err)
+        console.log(docCategoria)
+
+    })
     res.json({
         message:"Guardado"
     });
