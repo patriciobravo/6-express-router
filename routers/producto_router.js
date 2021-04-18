@@ -10,7 +10,7 @@ router.param('productoId', productoById);
 router.get('/producto', listar);
 router.get('/producto/:productoId', getxId);
 router.post('/producto', guardar);
-router.delete('/producto/:id', borrar);
+router.delete('/producto/:productoId', borrar);
 router.put('/producto/:id', update);
 
 module.exports = router;

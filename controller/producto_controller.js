@@ -27,21 +27,20 @@ const data = [
 
 //Listar Producto
 
-function listar(req, res) {
+function listar(req, res, id) {
 
-    ModelProducto.find()
-    .select('-imagen')
-    .exec( (err, items) => {
+    let myquery = ModelProducto.find(id);
 
-        if(err || !items)
+    myquery 
+        .select('-imagen')
+        .exec( (err, items) => {
 
-        return errorHandler(items, err)
-  
-          return res.json({
-                items: items
-            })
-      
-    })
+            if(err || !items) return errorHandler(items, err)
+    
+            return res.json({
+                    items: items
+                })
+        })
 };
 
 //Get x Id Producto
@@ -86,8 +85,6 @@ function getxId(req, res, next) {
     // })
 }
 
-
-
 //Guardar Producto
 
 function guardar(req, res, next)  {
@@ -129,18 +126,37 @@ function guardar(req, res, next)  {
 //Borrar Producto
 
 function borrar(req, res)  {
-    res.json({
-        message:"Eliminado"
-    });
+
+    let docProducto = req.docProducto
+    docProducto.disponible = false;
+    docProducto.save( (err, item) => {
+        if(err || !item) return errorHandler(item, err)
+
+        return  res.json({
+            items: item
+        });
+    })
 };
 
 
 //Actualizar Producto
 
-function update(req, res)  {
-    res.json({
-        message:"Actualizado"
-    });
+function update(req, res, next)  {
+
+    let id = req.params.id;
+    console.log(id)
+
+    ModelProducto.findByIdAndUpdate(id, req.body, { new: true },
+        (err, docProducto) => {
+
+            if(err || !docProducto) return errorHandler(docProducto, next, err)
+
+            return  res.json({
+                items: docProducto
+            });
+        })
+    
+   
 };
 
 module.exports = {
